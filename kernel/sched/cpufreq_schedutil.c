@@ -526,6 +526,13 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
 	sg_cpu->iowait_boost = sg_cpu->min;
 }
 
+unsigned long sched_cpu_util(int cpu)
+{
+	unsigned long max = arch_scale_cpu_capacity(NULL, cpu);
+
+	return schedutil_cpu_util(cpu, cpu_util_cfs(cpu_rq(cpu)), max, ENERGY_UTIL, NULL);
+}
+
 /**
  * sugov_iowait_apply() - Apply the IO boost to a CPU.
  * @sg_cpu: the sugov data for the cpu to boost
